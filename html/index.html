@@ -120,6 +120,8 @@ y =
 noloadc = @(x) (noload(x) / (24*EI)) * x^2 * (x^2 - 4*L*x + 6*L^2);
 
 plotcompare(10, noload, noloadc);
+xlabel({'Position','(M)'});
+ylabel({'Beam Deflection','(M)'});
 </pre><img vspace="5" hspace="5" src="p1_01.png" alt=""> <pre class="codeinput"><h2>Part 3</h2>
 
 <span class="comment">% Rerun the calculation for a number of exponentially increasing n</span>
@@ -134,6 +136,8 @@ c = condcomp(ns);
 
 errortable(ns, e, c)
 loglog(ns, e);
+xlabel('Number of Segments');
+ylabel({'Error','(M)'});
 </pre><pre class="codeoutput">
 
 ans =
@@ -156,7 +160,7 @@ ans =
     10240    3.9358e-05    3.6176e+16
     20480    0.00049639    6.1571e+17
 
-</pre><img vspace="5" hspace="5" src="p1_02.png" alt=""> <pre class="codeinput"><h2><a href="proof4">Part 4</a></h2>
+</pre><img vspace="5" hspace="5" src="p1_02.png" alt=""> <pre class="codeinput"><h2>Part 4 - <a href="proof4">Link</a></h2>
 
 <span class="comment">% Prove that the given formula for a sinusoidal load properly</span>
 <span class="comment">% fulfills all requirements for a Euler Beam</span>
@@ -173,6 +177,8 @@ e = errorcomp(ns, sinload, sinloadc);
 
 errortable(ns, e, c)
 loglog(ns, e);
+xlabel('Number of Segments');
+ylabel({'Error','(M)'});
 </pre><pre class="codeoutput">
 ans =
 
@@ -194,8 +200,9 @@ ans =
     10240    0.00057853    3.6176e+16
     20480     0.0072957    6.1571e+17
 
-</pre><img vspace="5" hspace="5" src="p1_03.png" alt=""> <pre class="codeinput">hs = arrayfun(@(n) L/n, ns);
-loglog(ns, hs.*e);
+</pre><img vspace="5" hspace="5" src="p1_03.png" alt=""> <pre class="codeinput">loglog(ns, e/sinloadc(2));
+xlabel('Number of Segments');
+ylabel({'Error','(%)'});
 </pre><img vspace="5" hspace="5" src="p1_04.png" alt=""> <pre class="codeinput"><h2>Part 6</h2>
 
 <span class="comment">% Replace the sinusoidal load with a 70kg diver on the last 20cm</span>
@@ -213,6 +220,8 @@ y3 = eulermx(n, diverload);
 
 max_deflection = [y1(end) y2(end) y3(end)]'
 plot(x, y1, <span class="string">'r'</span>, x, y2, <span class="string">'g'</span>, x, y3, <span class="string">'k'</span>);
+xlabel({'Position','(M)'});
+ylabel({'Beam Deflection','(M)'});
 </pre><pre class="codeoutput">
 max_deflection =
 
@@ -242,6 +251,8 @@ c = condcomp(ns);
 errortable(ns, e, c)
 
 loglog(ns, e);
+xlabel('Number of Segments');
+ylabel({'Error','(M)'});
 </pre><pre class="codeoutput">
 
 ans =
@@ -270,8 +281,9 @@ ans =
     6.5536e+05     9.997e-12    3.0177e+20
     1.3107e+06    2.8024e-12    5.2493e+20
 
-</pre><img vspace="5" hspace="5" src="p1_06.png" alt=""> <pre class="codeinput">hs = arrayfun(@(n) L/n, ns);
-loglog(ns, hs.*e);
+</pre><img vspace="5" hspace="5" src="p1_06.png" alt=""> <pre class="codeinput">loglog(ns, e/sinloadbc(2));
+xlabel('Number of Segments');
+ylabel({'Error','(%)'});
 </pre><img vspace="5" hspace="5" src="p1_07.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %%Setup

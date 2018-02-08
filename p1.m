@@ -37,6 +37,8 @@ y = eulermx(10, noload)
 noloadc = @(x) (noload(x) / (24*EI)) * x^2 * (x^2 - 4*L*x + 6*L^2);
 
 plotcompare(10, noload, noloadc);
+xlabel({'Position','(M)'});
+ylabel({'Beam Deflection','(M)'});
 
 %%
 %%Part 3
@@ -53,11 +55,13 @@ c = condcomp(ns);
 
 errortable(ns, e, c)
 loglog(ns, e);
+xlabel('Number of Segments');
+ylabel({'Error','(M)'});
 
 %%
 %%Part 4
 
-% Prove that the given formula for a sinusoidal load properly
+% Proove that the given formula for a sinusoidal load properly
 % fulfills all requirements for a Euler Beam
 
 %%
@@ -74,11 +78,14 @@ e = errorcomp(ns, sinload, sinloadc);
 
 errortable(ns, e, c)
 loglog(ns, e);
+xlabel('Number of Segments');
+ylabel({'Error','(M)'});
 
 %%
 
-hs = arrayfun(@(n) L/n, ns);
-loglog(ns, hs.*e);
+loglog(ns, e/sinloadc(2));
+xlabel('Number of Segments');
+ylabel({'Error','(%)'});
 
 %%
 %%Part 6
@@ -98,6 +105,9 @@ y3 = eulermx(n, diverload);
 
 max_deflection = [y1(end) y2(end) y3(end)]'
 plot(x, y1, 'r', x, y2, 'g', x, y3, 'k');
+xlabel({'Position','(M)'});
+ylabel({'Beam Deflection','(M)'});
+legend('no load','sinusoidal pile','70kg diver');
 
 %%
 %%Part 7
@@ -122,8 +132,11 @@ c = condcomp(ns);
 errortable(ns, e, c)
 
 loglog(ns, e);
+xlabel('Number of Segments');
+ylabel({'Error','(M)'});
 
 %%
 
-hs = arrayfun(@(n) L/n, ns);
-loglog(ns, hs.*e);
+loglog(ns, e/sinloadbc(2));
+xlabel('Number of Segments');
+ylabel({'Error','(%)'});
