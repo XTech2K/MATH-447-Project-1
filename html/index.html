@@ -1,0 +1,407 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>p1</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-02-08"><meta name="DC.source" content="p1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content">
+
+
+<pre><h1>Euler Beam Problem</h1>
+<p>This problem seeks to model what happens when a material bends under stress.<br>To show this, we take the Euler-Bernoulli equation and attempt to discretize it.<br>There is an error associated with discretization, and for our discretization<br>we are dividing the beam into a union of many segments of length h, which will<br>give us a sequence of linear equations, which is shown in a matrix. We can then<br>compare our results from discretization (which has an associated error) against the<br>correct solution and determine which value of h results in the most accurate discretization.</p>
+<p>Functions can be found <a href="functions">here</a> and all source code can be found in <a href="https://github.com/XTech2K/MATH-447-Project-1">this GitHub repo</a>.
+</pre><pre class="codeinput"><h2>Setup</h2>
+
+<span class="comment">%First, we need to set our constants for use in the entire rest of</span>
+<span class="comment">%the project</span>
+
+<span class="comment">%Beam is a constant 2 meters long</span>
+L= 2;
+
+<span class="comment">%Gravitational constant</span>
+g = 9.81;
+
+<span class="comment">%Beam is a constant 30cm wide</span>
+w = 0.3;
+
+<span class="comment">%Beam is a constant 3cm thick</span>
+d = 0.03;
+
+<span class="comment">%Young's modulus and the area moment of inertia - always used together</span>
+EI = (1.3 * 10^10) * (w * d^3 / 12);
+</pre><pre class="codeinput"><h2>Part 1</h2>
+
+<span class="comment">% Define a matrix which allows us to solve for the displacements using n=10 grid steps.</span>
+
+noload = @(x) -480 * w * d * g;
+
+y = eulermx(10, noload)
+</pre><pre class="codeoutput">
+y =
+
+  -0.000180624738462
+  -0.000674847507692
+  -0.001416986584615
+  -0.002349087507692
+  -0.003420923076923
+  -0.004589993353846
+  -0.005821525661539
+  -0.007088474584616
+  -0.008371521969231
+  -0.009659076923077
+
+</pre><pre class="codeinput"><h2>Part 2</h2>
+
+<span class="comment">% Plot the solution from Part 1 against the known correct formula</span>
+<span class="comment">% for a Euler Beam with no load</span>
+
+noloadc = @(x) (noload(x) / (24*EI)) * x^2 * (x^2 - 4*L*x + 6*L^2);
+
+plotcompare(10, noload, noloadc);
+</pre><img vspace="5" hspace="5" src="p1_01.png" alt=""> <pre class="codeinput"><h2>Part 3</h2>
+
+<span class="comment">% Rerun the calculation for a number of exponentially increasing n</span>
+<span class="comment">% values, comparing and plotting the error for each value</span>
+
+n = 10;
+k = 11;
+
+ns = n * arrayfun(@(x) 2.^x, (0:k))';
+e = errorcomp(ns, noload, noloadc);
+c = condcomp(ns);
+
+errortable(ns, e, c)
+loglog(ns, e);
+</pre><pre class="codeoutput">
+
+ans =
+
+  12&times;3 table
+
+      n        error       condition 
+    _____    __________    __________
+
+       10    6.6093e-16         33254
+       20    4.0575e-15     5.303e+05
+       40    1.9687e-13    8.4493e+06
+       80    1.3385e-12    1.3482e+08
+      160    1.5524e-11    2.1539e+09
+      320     3.746e-10    3.4435e+10
+      640    8.2035e-10    5.5073e+11
+     1280    4.2696e-09    8.8099e+12
+     2560    1.7006e-07    1.4094e+14
+     5120     3.797e-06    2.2549e+15
+    10240    3.9358e-05    3.6176e+16
+    20480    0.00049639    6.1571e+17
+
+</pre><img vspace="5" hspace="5" src="p1_02.png" alt=""> <pre class="codeinput"><h2><a href="proof4">Part 4</a></h2>
+
+<span class="comment">% Prove that the given formula for a sinusoidal load properly</span>
+<span class="comment">% fulfills all requirements for a Euler Beam</span>
+</pre><pre class="codeinput"><h2>Part 5</h2>
+
+<span class="comment">% Calculate error values for the sinusoidal load and use them to</span>
+<span class="comment">% determine the optimal value of n to get maximum accuracy</span>
+
+sinload = @(x) noload(x) - 100 * g * sin(pi * x / L);
+
+sinloadc = @(x) noloadc(x) - (100 * g * L / (EI * pi)) * (L^3 / pi^3 * sin(pi / L * x) - x^3 / 6 + L / 2 * x^2 - L^2 / pi^2 * x);
+
+e = errorcomp(ns, sinload, sinloadc);
+
+errortable(ns, e, c)
+loglog(ns, e);
+</pre><pre class="codeoutput">
+ans =
+
+  12&times;3 table
+
+      n        error       condition 
+    _____    __________    __________
+
+       10     0.0020828         33254
+       20     0.0005377     5.303e+05
+       40    0.00013546    8.4493e+06
+       80    3.3931e-05    1.3482e+08
+      160    8.4865e-06    2.1539e+09
+      320    2.1164e-06    3.4435e+10
+      640    5.1829e-07    5.5073e+11
+     1280    7.2107e-08    8.8099e+12
+     2560    2.4803e-06    1.4094e+14
+     5120    5.5817e-05    2.2549e+15
+    10240    0.00057853    3.6176e+16
+    20480     0.0072957    6.1571e+17
+
+</pre><img vspace="5" hspace="5" src="p1_03.png" alt=""> <pre class="codeinput">hs = arrayfun(@(n) L/n, ns);
+loglog(ns, hs.*e);
+</pre><img vspace="5" hspace="5" src="p1_04.png" alt=""> <pre class="codeinput"><h2>Part 6</h2>
+
+<span class="comment">% Replace the sinusoidal load with a 70kg diver on the last 20cm</span>
+<span class="comment">% and plot the resulting Euler Beam</span>
+
+n = 1280;
+
+diverload = @(x) noload(x) - ((x &gt;= 1.8) * 70 / 0.2 * g);
+
+h = L/n;
+x = (h:h:L)';
+y1 = eulermx(n, noload);
+y2 = eulermx(n, sinload);
+y3 = eulermx(n, diverload);
+
+max_deflection = [y1(end) y2(end) y3(end)]'
+plot(x, y1, <span class="string">'r'</span>, x, y2, <span class="string">'g'</span>, x, y3, <span class="string">'k'</span>);
+</pre><pre class="codeoutput">
+max_deflection =
+
+  -0.009659099207968
+  -0.141759506430763
+  -0.203411572381376
+
+</pre><img vspace="5" hspace="5" src="p1_05.png" alt=""> <pre class="codeinput"><h2>Part 7</h2>
+
+<span class="comment">% Modify the coefficient matrix to fulfill conditions for a</span>
+<span class="comment">% clamped-clamped beam, then repeat part 5 for this beam</span>
+
+sinloadbc = @(x) (noload(x) / (24 * EI())) * x^2 * (L - x)^2 - (100 * 9.81 * L^2 / (pi^4 * EI())) * (L^2 * sin(pi / L * x) + pi * x * (x - L));
+
+y1 = bridgemx(n, sinload);
+y2 = eulerfn(n, sinloadbc);
+
+plot(x, y1, <span class="string">'r'</span>, x, y2, <span class="string">'b'</span>);
+
+n = 10;
+k = 17;
+
+ns = n * arrayfun(@(x) 2.^x, (0:k))';
+e = bridgeerrorcomp(ns, sinload, sinloadbc);
+c = condcomp(ns);
+
+errortable(ns, e, c)
+
+loglog(ns, e);
+</pre><pre class="codeoutput">
+
+ans =
+
+  18&times;3 table
+
+        n           error       condition 
+    __________    __________    __________
+
+            10     0.0014178         33254
+            20    0.00070868     5.303e+05
+            40    0.00012187    8.4493e+06
+            80    1.7271e-05    1.3482e+08
+           160    2.2845e-06    2.1539e+09
+           320    2.9336e-07    3.4435e+10
+           640    3.7156e-08    5.5073e+11
+          1280    4.6748e-09    8.8099e+12
+          2560    5.8619e-10    1.4094e+14
+          5120    7.2365e-11    2.2549e+15
+         10240    1.2453e-11    3.6176e+16
+         20480     3.174e-12    6.1571e+17
+         40960    1.0747e-11    1.7145e+19
+         81920    2.2523e-10    9.1623e+19
+    1.6384e+05    3.5116e-10    9.9647e+19
+    3.2768e+05    3.3953e-11    1.5188e+20
+    6.5536e+05     9.997e-12    3.0177e+20
+    1.3107e+06    2.8024e-12    5.2493e+20
+
+</pre><img vspace="5" hspace="5" src="p1_06.png" alt=""> <pre class="codeinput">hs = arrayfun(@(n) L/n, ns);
+loglog(ns, hs.*e);
+</pre><img vspace="5" hspace="5" src="p1_07.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%Setup
+
+%First, we need to set our constants for use in the entire rest of
+%the project
+
+%Beam is a constant 2 meters long
+L= 2;
+
+%Gravitational constant
+g = 9.81;
+
+%Beam is a constant 30cm wide
+w = 0.3;
+
+%Beam is a constant 3cm thick
+d = 0.03;
+
+%Young's modulus and the area moment of inertia - always used together
+EI = (1.3 * 10^10) * (w * d^3 / 12);
+
+
+%%
+%%Part 1
+
+% Define a matrix which allows us to solve for the displacements using n=10 grid steps.
+
+noload = @(x) -480 * w * d * g;
+
+y = eulermx(10, noload)
+
+%%
+%%Part 2
+
+% Plot the solution from Part 1 against the known correct formula
+% for a Euler Beam with no load
+
+noloadc = @(x) (noload(x) / (24*EI)) * x^2 * (x^2 - 4*L*x + 6*L^2);
+
+plotcompare(10, noload, noloadc);
+
+%%
+%%Part 3
+
+% Rerun the calculation for a number of exponentially increasing n
+% values, comparing and plotting the error for each value
+
+n = 10;
+k = 11;
+
+ns = n * arrayfun(@(x) 2.^x, (0:k))';
+e = errorcomp(ns, noload, noloadc);
+c = condcomp(ns);
+
+errortable(ns, e, c)
+loglog(ns, e);
+
+%%
+%%Part 4
+
+% Proove that the given formula for a sinusoidal load properly
+% fulfills all requirements for a Euler Beam
+
+%%
+%%Part 5
+
+% Calculate error values for the sinusoidal load and use them to
+% determine the optimal value of n to get maximum accuracy
+
+sinload = @(x) noload(x) - 100 * g * sin(pi * x / L);
+
+sinloadc = @(x) noloadc(x) - (100 * g * L / (EI * pi)) * (L^3 / pi^3 * sin(pi / L * x) - x^3 / 6 + L / 2 * x^2 - L^2 / pi^2 * x);
+
+e = errorcomp(ns, sinload, sinloadc);
+
+errortable(ns, e, c)
+loglog(ns, e);
+
+%%
+
+hs = arrayfun(@(n) L/n, ns);
+loglog(ns, hs.*e);
+
+%%
+%%Part 6
+
+% Replace the sinusoidal load with a 70kg diver on the last 20cm
+% and plot the resulting Euler Beam
+
+n = 1280;
+
+diverload = @(x) noload(x) - ((x >= 1.8) * 70 / 0.2 * g);
+
+h = L/n;
+x = (h:h:L)';
+y1 = eulermx(n, noload);
+y2 = eulermx(n, sinload);
+y3 = eulermx(n, diverload);
+
+max_deflection = [y1(end) y2(end) y3(end)]'
+plot(x, y1, 'r', x, y2, 'g', x, y3, 'k');
+
+%%
+%%Part 7
+
+% Modify the coefficient matrix to fulfill conditions for a
+% clamped-clamped beam, then repeat part 5 for this beam
+
+sinloadbc = @(x) (noload(x) / (24 * EI())) * x^2 * (L - x)^2 - (100 * 9.81 * L^2 / (pi^4 * EI())) * (L^2 * sin(pi / L * x) + pi * x * (x - L));
+
+y1 = bridgemx(n, sinload);
+y2 = eulerfn(n, sinloadbc);
+
+plot(x, y1, 'r', x, y2, 'b');
+
+n = 10;
+k = 17;
+
+ns = n * arrayfun(@(x) 2.^x, (0:k))';
+e = bridgeerrorcomp(ns, sinload, sinloadbc);
+c = condcomp(ns);
+
+errortable(ns, e, c)
+
+loglog(ns, e);
+
+%%
+
+hs = arrayfun(@(n) L/n, ns);
+loglog(ns, hs.*e);
+##### SOURCE END #####
+--></body></html>

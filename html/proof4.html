@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Part 4 Proof </title>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+</head>
+
+<body bgcolor=#FFFFFF>
+<p>
+
+
+<h1>Part 4 Proof </h1>
+
+<h4>We want to show f(x) = (EI)y''''</h4>
+
+Recall that: <p>
+
+\[ y(x) = \frac{f}{24EI}x^2(x^2-4Lx+6L^2) - \frac{pgL}{EI\pi}(\frac{L^3}{\pi^3} sin\frac{\pi}{L}x - \frac{x^3}{6} + \frac{L}{2}x^2 - \frac{L^2}{\pi^2}x \text{ } \text{ } \text{ } \text{ } \text{ } \text{ }\text{ (1)} \]<p>
+
+<br \>
+<br \>
+
+\( \text{If we let: } A = \frac{f}{24EI} \text{ and } B = \frac{pgL}{EI\pi} \)<p>
+
+Then (1) can be re-written as: <p>
+
+\[ y(x) = Ax^4 + \frac{Bx^3}{6} - A4Lx^3 + 6AL^2x^2 - \frac{BL}{2}x^2 + \frac{BL^2}{\pi^2}x - B\frac{L^3}{\pi^3}sin\frac{\pi}{L}x \text{ } \text{ } \text{ } \text{ } \text{ } \text{ } \text{ } \text{ } \text{ } \text{(2)} \]<p>
+
+<br \>
+<br \>
+
+And we can take four derivatives of (2): <p>
+
+\[ y'(x) = 4Ax^3 + \frac{Bx^2}{2} - 12ALx^2 + 12AL^2x - BLx + \frac{BL^2}{\pi^2} - B\frac{L^2}{\pi^2}cos\frac{\pi}{L}x  \]<p>
+
+\[y''(x) = 12Ax^2 + Bx - 24ALx + 12AL^2 - BL + B\frac{L}{\pi}sin\frac{\pi}{L}x  \] <p>
+
+\[y'''(x) = 24Ax + B - 24AL + Bcos\frac{\pi}{L}x  \] <p>
+
+\[ y''''(x) = 24A - B\frac{\pi}{L}sin\frac{\pi}{L}x \] <p>
+
+<br \>
+
+Part 4 asks us to add a sinusoidal pile to the beam. Hence, we add an equation of the form \( s(x) = -pgsin\frac{\pi}{L}x \) to the force term,\(\text{ }  f(x) \), where we recall \( f(x) = -480wdg. \) <p> 
+
+<br \>
+
+Thus, it is easy to show that y(x) satisfies the Euler-Bernoulli beam equation and the clamped-free boundry conditions (by showing \( EIy'''' = f(x) \)) <p>
+
+<br \>
+By substituting back in A and B we have:
+\[ EI (24\frac{f}{24EI} - \frac{pgL}{EI\pi}\frac{\pi}{L}sin\frac{\pi}{L}x) = -480wdg - pgsin\frac{\pi}{L}x \] <p>
+Recall \( f=-480wdg \). Then, simplifying the right hand side of the equation clearly shows its validity: <p>
+\[ -480wdg - pgsin\frac{\pi}{L}x  = -480wdg - pgsin\frac{\pi}{L}x \] <p>
+</p>
+
+</html>
+
+
