@@ -83,7 +83,7 @@ ylabel({'Error','(M)'});
 
 %%
 
-loglog(ns, e/sinloadc(2));
+loglog(ns, e/-sinloadc(2));
 xlabel('Number of Segments');
 ylabel({'Error','(%)'});
 
@@ -137,6 +137,6 @@ ylabel({'Error','(M)'});
 
 %%
 
-loglog(ns, e/sinloadbc(2));
+loglog(ns, e/-sinloadbc(2));
 xlabel('Number of Segments');
 ylabel({'Error','(%)'});
